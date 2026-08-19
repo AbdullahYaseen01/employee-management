@@ -133,13 +133,7 @@ Supported scenarios:
 - Deactivation failure
 - Reset mock data
 
-You can also share a scenario with the `demo` query parameter:
-
-```text
-/?demo=empty
-/?demo=fetch-error
-/?demo=slow
-```
+Scenarios stay in the current page session only. They are not written into the URL, so a refresh always returns to the populated directory. Fetch/create/edit/deactivate failures are simulated in the API client so the browser console does not show HTTP 500s.
 
 The default state remains a realistic populated directory.
 

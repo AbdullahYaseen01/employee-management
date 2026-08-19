@@ -6,7 +6,7 @@ import type {
   ListEmployeesParams,
 } from '@/features/employees/types/employee'
 import { PAGE_SIZE_OPTIONS } from '@/features/employees/types/employee'
-import { getDemoScenario, getMockLatency } from '@/mocks/demoController'
+import { getMockLatency } from '@/mocks/demoController'
 import {
   createInStore,
   deactivateInStore,
@@ -20,10 +20,7 @@ const API_ROOT = '/api/employees'
 
 export const handlers = [
   http.get(API_ROOT, async ({ request }) => {
-    const blocked = await maybeFailRead()
-    if (blocked) {
-      return blocked
-    }
+    await waitForLatency()
 
     const url = new URL(request.url)
     const params: ListEmployeesParams = {
@@ -38,10 +35,7 @@ export const handlers = [
   }),
 
   http.get(`${API_ROOT}/:id`, async ({ params }) => {
-    const blocked = await maybeFailRead()
-    if (blocked) {
-      return blocked
-    }
+    await waitForLatency()
 
     try {
       return HttpResponse.json(getFromStore(String(params.id)))
@@ -52,9 +46,6 @@ export const handlers = [
 
   http.post(API_ROOT, async ({ request }) => {
     await waitForLatency()
-    if (getDemoScenario() === 'create-error') {
-      return jsonError('The directory service could not create this employee.', 500)
-    }
 
     const payload = (await request.json()) as EmployeeWritePayload
     const created = createInStore(payload)
@@ -63,9 +54,6 @@ export const handlers = [
 
   http.patch(`${API_ROOT}/:id`, async ({ params, request }) => {
     await waitForLatency()
-    if (getDemoScenario() === 'edit-error') {
-      return jsonError('The directory service could not save these changes.', 500)
-    }
 
     try {
       const payload = (await request.json()) as EmployeeWritePayload
@@ -77,9 +65,6 @@ export const handlers = [
 
   http.post(`${API_ROOT}/:id/deactivate`, async ({ params }) => {
     await waitForLatency()
-    if (getDemoScenario() === 'deactivate-error') {
-      return jsonError('The directory service could not deactivate this employee.', 500)
-    }
 
     try {
       return HttpResponse.json(deactivateInStore(String(params.id)))
@@ -91,14 +76,6 @@ export const handlers = [
     }
   }),
 ]
-
-async function maybeFailRead() {
-  await waitForLatency()
-  if (getDemoScenario() === 'fetch-error') {
-    return jsonError('The employee directory is temporarily unavailable.', 500)
-  }
-  return null
-}
 
 async function waitForLatency(): Promise<void> {
   const latency = getMockLatency()

@@ -50,15 +50,6 @@ export function subscribeDemoScenario(listener: () => void): () => void {
 }
 
 export function hydrateDemoController(): void {
-  if (typeof window === 'undefined') {
-    return
-  }
-  const params = new URLSearchParams(window.location.search)
-  const fromQuery = params.get('demo')
-  if (fromQuery && isDemoScenario(fromQuery)) {
-    scenario = fromQuery
-    return
-  }
   scenario = 'normal'
 }
 

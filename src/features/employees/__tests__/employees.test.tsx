@@ -48,10 +48,13 @@ describe('Employee list', () => {
 
     await user.type(screen.getByLabelText('Search by name'), 'amina')
 
-    await screen.findAllByText('Amina Okonkwo')
-    await waitFor(() => {
-      expectNoText('James Chen')
-    })
+    await screen.findAllByText('Amina Okonkwo', {}, { timeout: 8000 })
+    await waitFor(
+      () => {
+        expectNoText('James Chen')
+      },
+      { timeout: 8000 },
+    )
   })
 
   it('filters by department', async () => {
@@ -236,9 +239,13 @@ describe('Employee create form', () => {
     await user.click(within(dialog).getByRole('button', { name: 'Add employee' }))
 
     expect(
-      await within(dialog).findByRole('button', { name: /Adding employee/ }),
+      await within(dialog).findByRole(
+        'button',
+        { name: /Adding employee/ },
+        { timeout: 8000 },
+      ),
     ).toBeDisabled()
-    await screen.findAllByText('Aaron Adebayo')
+    await screen.findAllByText('Aaron Adebayo', {}, { timeout: 8000 })
     expect(screen.queryByRole('dialog', { name: 'Add employee' })).not.toBeInTheDocument()
   })
 

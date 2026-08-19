@@ -3,6 +3,10 @@ import type {
   PaginatedEmployees,
 } from '@/features/employees/types/employee'
 import type { EmployeeApi } from '@/features/employees/api/employeeApi'
+import {
+  throwIfDemoReadFails,
+  throwIfDemoWriteFails,
+} from '@/features/employees/api/demoFailures'
 import { ApiError, isAbortError } from '@/features/employees/utils/errors'
 
 const API_ROOT = '/api/employees'
@@ -10,6 +14,7 @@ const API_ROOT = '/api/employees'
 export function createHttpEmployeeApi(baseUrl = API_ROOT): EmployeeApi {
   return {
     async listEmployees(params, options) {
+      await throwIfDemoReadFails()
       const url = new URL(baseUrl, window.location.origin)
       if (params.q) url.searchParams.set('q', params.q)
       if (params.department) url.searchParams.set('department', params.department)
@@ -22,12 +27,14 @@ export function createHttpEmployeeApi(baseUrl = API_ROOT): EmployeeApi {
     },
 
     async getEmployee(id, options) {
+      await throwIfDemoReadFails()
       return requestJson<Employee>(`${baseUrl}/${id}`, {
         signal: options?.signal,
       })
     },
 
     async createEmployee(payload) {
+      await throwIfDemoWriteFails('create')
       return requestJson<Employee>(baseUrl, {
         method: 'POST',
         body: JSON.stringify(payload),
@@ -35,6 +42,7 @@ export function createHttpEmployeeApi(baseUrl = API_ROOT): EmployeeApi {
     },
 
     async updateEmployee(id, payload) {
+      await throwIfDemoWriteFails('edit')
       return requestJson<Employee>(`${baseUrl}/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(payload),
@@ -42,6 +50,7 @@ export function createHttpEmployeeApi(baseUrl = API_ROOT): EmployeeApi {
     },
 
     async deactivateEmployee(id) {
+      await throwIfDemoWriteFails('deactivate')
       return requestJson<Employee>(`${baseUrl}/${id}/deactivate`, {
         method: 'POST',
       })

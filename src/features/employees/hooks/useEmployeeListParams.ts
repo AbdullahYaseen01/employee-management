@@ -26,9 +26,19 @@ export function useEmployeeListParams() {
     setSearchInput(q)
   }, [q])
 
+  useEffect(() => {
+    if (!searchParams.has('demo')) {
+      return
+    }
+    const next = new URLSearchParams(searchParams)
+    next.delete('demo')
+    setSearchParams(next, { replace: true })
+  }, [searchParams, setSearchParams])
+
   const replaceParams = useCallback(
     (updates: Record<string, string | number | undefined | null>) => {
       const next = new URLSearchParams(searchParams)
+      next.delete('demo')
       for (const [key, value] of Object.entries(updates)) {
         if (value === undefined || value === null || value === '') {
           next.delete(key)

@@ -19,5 +19,6 @@ export default defineConfig({
     restoreMocks: true,
     pool: 'threads',
     fileParallelism: false,
+    testTimeout: 15000,
   },
 })

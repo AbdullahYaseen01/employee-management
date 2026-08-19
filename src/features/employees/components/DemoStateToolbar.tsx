@@ -1,5 +1,4 @@
 import { useState, useSyncExternalStore } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { employeeKeys } from '@/features/employees/api/queryKeys'
@@ -15,7 +14,6 @@ import { resetEmployeeStore } from '@/mocks/employeeStore'
 
 export function DemoStateToolbar() {
   const [open, setOpen] = useState(false)
-  const [searchParams, setSearchParams] = useSearchParams()
   const scenario = useSyncExternalStore(
     subscribeDemoScenario,
     getDemoScenario,
@@ -25,22 +23,12 @@ export function DemoStateToolbar() {
 
   async function apply(next: DemoScenario) {
     setDemoScenario(next)
-    const nextParams = new URLSearchParams(searchParams)
-    if (next === 'normal') {
-      nextParams.delete('demo')
-    } else {
-      nextParams.set('demo', next)
-    }
-    setSearchParams(nextParams, { replace: true })
     await queryClient.invalidateQueries({ queryKey: employeeKeys.all })
   }
 
   async function resetData() {
     resetEmployeeStore()
     setDemoScenario('normal')
-    const nextParams = new URLSearchParams(searchParams)
-    nextParams.delete('demo')
-    setSearchParams(nextParams, { replace: true })
     await queryClient.invalidateQueries({ queryKey: employeeKeys.all })
   }
 
@@ -50,8 +38,9 @@ export function DemoStateToolbar() {
         <div className="demo-panel" role="region" aria-label="Demo states">
           <h2>Demo states</h2>
           <p className="demo-panel__hint">
-            Reviewer controls only. Fetch failure is a simulated API error, not
-            a broken app. Choose Normal populated data to restore the directory.
+            Reviewer controls only. These options simulate loading, empty, and
+            error states in the UI. They do not mean the app is broken. Choose
+            Normal populated data, then refresh, to see the working directory.
           </p>
           {DEMO_SCENARIOS.map((item) => (
             <label key={item}>
