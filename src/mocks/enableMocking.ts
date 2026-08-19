@@ -7,6 +7,10 @@ export async function enableMocking(): Promise<void> {
     onUnhandledRequest: 'bypass',
     serviceWorker: {
       url: '/mockServiceWorker.js',
+      options: {
+        scope: '/',
+        updateViaCache: 'none',
+      },
     },
     quiet: true,
   })

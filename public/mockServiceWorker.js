@@ -96,6 +96,16 @@ addEventListener('fetch', function (event) {
     return
   }
 
+  // Only intercept the mock employee API. Passthrough of the HTML document,
+  // JS/CSS, and other assets fails in production with "Failed to fetch".
+  const url = new URL(event.request.url)
+  if (url.origin === self.location.origin && !url.pathname.startsWith('/api/')) {
+    return
+  }
+  if (url.origin !== self.location.origin) {
+    return
+  }
+
   // Opening the DevTools triggers the "only-if-cached" request
   // that cannot be handled by the worker. Bypass such requests.
   if (
@@ -247,7 +257,7 @@ async function getResponse(event, client, requestId, requestInterceptedAt) {
       }
     }
 
-    return fetch(requestClone, { headers })
+    return fetch(requestClone, { headers }).catch(() => Response.error())
   }
 
   // Bypass mocking when the client is not active.

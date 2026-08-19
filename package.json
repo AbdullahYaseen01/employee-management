@@ -22,7 +22,8 @@
     "react-hook-form": "^7.85.0",
     "react-router-dom": "^7.18.2",
     "sonner": "^2.0.8",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "msw": "^2.15.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^7.0.1",
@@ -33,7 +34,6 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
     "jsdom": "^29.1.1",
-    "msw": "^2.15.0",
     "oxlint": "^1.75.0",
     "typescript": "~6.0.2",
     "vite": "^8.2.0",
