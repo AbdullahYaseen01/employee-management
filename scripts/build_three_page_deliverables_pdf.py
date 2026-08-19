@@ -350,7 +350,7 @@ def page3(c: canvas.Canvas) -> None:
 
     gap = 9
     cw = (CONTENT_W - gap) / 2
-    pack_h, pack_y = 48, 38
+    pack_h, pack_y = 72, 36
     block_h = 112
     sb_h = 60
     row_h = 122
@@ -467,18 +467,29 @@ def page3(c: canvas.Canvas) -> None:
             c.setFont("Helvetica-Bold", 7.4)
             c.drawString(x + 8, cy + 4.5, label)
             x += tw + 7
+        c.setFillColor(MUTED)
+        c.setFont("Helvetica-Oblique", 7.2)
+        note = (
+            "This delivery also includes create-form reset after save, close locked during in-flight "
+            "mutations, stale error reset on close, wrapping filters, and a teal/navy HR visual treatment. "
+            "Required workflows are unchanged. 21 automated tests pass."
+        )
+        ny = cy - 16
+        for line in wrap(c, note, "Helvetica-Oblique", 7.2, CONTENT_W - 24):
+            if ny > demo_y + 8:
+                c.drawString(ML + 12, ny, line)
+                ny -= 9
 
     rounded(c, ML, pack_y, CONTENT_W, pack_h, 8, NAVY)
     c.setFillColor(GOLD)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(ML + 12, pack_y + 30, "CLIENT SUBMISSION CHECKLIST")
+    c.drawString(ML + 12, pack_y + 54, "SUBMITTED CLIENT PACK")
     c.setFillColor(white)
     c.setFont("Helvetica", 8)
-    c.drawString(
-        ML + 12,
-        pack_y + 13,
-        "1) Live demo URL     2) GitHub repository     3) README.md Senior Touch     4) PROMPTS.md AI disclosure",
-    )
+    c.drawString(ML + 12, pack_y + 36, "Live demo    https://employee-management-eta-one.vercel.app")
+    c.drawString(ML + 12, pack_y + 22, "GitHub         https://github.com/AbdullahYaseen01/employee-management")
+    c.setFillColor(HexColor("#C5D4DE"))
+    c.drawString(ML + 12, pack_y + 8, "Also included: README.md Senior Touch  ·  PROMPTS.md AI disclosure")
 
 
 def build() -> None:

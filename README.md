@@ -149,7 +149,7 @@ This is a static Vite app and can be imported directly into Vercel or Netlify.
 
 A live demo is available at [https://employee-management-eta-one.vercel.app](https://employee-management-eta-one.vercel.app).
 
-The source repository will be linked here after the first GitHub push.
+Source repository: [https://github.com/AbdullahYaseen01/employee-management](https://github.com/AbdullahYaseen01/employee-management).
 
 ### Vercel
 
