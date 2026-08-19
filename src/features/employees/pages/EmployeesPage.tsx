@@ -37,10 +37,17 @@ export function EmployeesPage() {
   const showInitialLoading = query.isPending && !data
   const showBackgroundFetch = query.isFetching && Boolean(data)
   const employees = data?.items ?? []
+  const hasUsefulCache = Boolean(data && data.items.length > 0)
   const isEmptyDirectory =
-    data !== undefined && data.totalItems === 0 && !list.hasActiveFilters
+    !query.isError &&
+    data !== undefined &&
+    data.totalItems === 0 &&
+    !list.hasActiveFilters
   const isNoMatch =
-    data !== undefined && data.totalItems === 0 && list.hasActiveFilters
+    !query.isError &&
+    data !== undefined &&
+    data.totalItems === 0 &&
+    list.hasActiveFilters
 
   const filterSummary = useMemo(
     () => buildFilterSummary(list.q, list.department, list.status),
@@ -109,7 +116,7 @@ export function EmployeesPage() {
           onRetry={() => {
             void query.refetch()
           }}
-          hasCachedData={Boolean(data)}
+          hasCachedData={hasUsefulCache}
         />
       ) : null}
 

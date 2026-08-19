@@ -20,9 +20,6 @@ export const DEMO_SCENARIO_LABELS: Record<DemoScenario, string> = {
   'deactivate-error': 'Deactivation failure',
 }
 
-const SCENARIO_KEY = 'meridian.demo-scenario'
-const LATENCY_KEY = 'meridian.mock-latency'
-
 let scenario: DemoScenario = 'normal'
 let latencyMs = 280
 const listeners = new Set<() => void>()
@@ -33,7 +30,6 @@ export function getDemoScenario(): DemoScenario {
 
 export function setDemoScenario(next: DemoScenario): void {
   scenario = next
-  persist()
   notify()
 }
 
@@ -61,36 +57,13 @@ export function hydrateDemoController(): void {
   const fromQuery = params.get('demo')
   if (fromQuery && isDemoScenario(fromQuery)) {
     scenario = fromQuery
-    persist()
     return
   }
-  try {
-    const stored = window.sessionStorage.getItem(SCENARIO_KEY)
-    if (stored && isDemoScenario(stored)) {
-      scenario = stored
-    }
-    const storedLatency = window.sessionStorage.getItem(LATENCY_KEY)
-    if (storedLatency) {
-      latencyMs = Number(storedLatency) || latencyMs
-    }
-  } catch {
-    // Ignore storage failures in private browsing.
-  }
+  scenario = 'normal'
 }
 
 export function isDemoScenario(value: string): value is DemoScenario {
   return (DEMO_SCENARIOS as readonly string[]).includes(value)
-}
-
-function persist(): void {
-  if (typeof window === 'undefined') {
-    return
-  }
-  try {
-    window.sessionStorage.setItem(SCENARIO_KEY, scenario)
-  } catch {
-    // Ignore storage failures.
-  }
 }
 
 function notify(): void {

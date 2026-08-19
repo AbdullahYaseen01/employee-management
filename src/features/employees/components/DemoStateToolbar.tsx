@@ -49,6 +49,10 @@ export function DemoStateToolbar() {
       {open ? (
         <div className="demo-panel" role="region" aria-label="Demo states">
           <h2>Demo states</h2>
+          <p className="demo-panel__hint">
+            Reviewer controls only. Fetch failure is a simulated API error, not
+            a broken app. Choose Normal populated data to restore the directory.
+          </p>
           {DEMO_SCENARIOS.map((item) => (
             <label key={item}>
               <input
