@@ -18,6 +18,7 @@ storybook-static
 !.env.example
 .vercel
 scripts/_pdf_preview/
+*.pdf
 
 # Editor directories and files
 .vscode/*
